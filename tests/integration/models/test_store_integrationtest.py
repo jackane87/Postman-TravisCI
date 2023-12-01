@@ -5,12 +5,15 @@ from models.item import ItemModel
 class StoreTest(BaseTest):
     #verifying the store json method when no items are associated
     def test_store_json(self):
-        store = StoreModel('Test Store 1')
-        expected = {
+        with self.app_context():
+            store = StoreModel('Test Store 1')
+            store.save_to_db()
+            expected = {
+            'id': 1,
             'name': 'Test Store 1',
             'items': []
-        }
-        self.assertDictEqual(store.json(), expected)
+            }
+            self.assertDictEqual(store.json(), expected)
 
     #verifying the store json method when multiple items are associated
     def test_store_json_multiple_items(self):
@@ -22,6 +25,7 @@ class StoreTest(BaseTest):
             item1.save_to_db()
             item2.save_to_db()
             expected = {
+                'id': 1,
                 'name': 'Test Store 1',
                 'items': [{'name': 'test_item1', 'price': 19.99}, {'name': 'test_item2', 'price': 10.99}]
             }
